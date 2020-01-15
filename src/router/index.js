@@ -48,6 +48,18 @@ const studentrviews = [
         meta: { title: '学生页面', icon: 'documentation', noCache: true }
       }
     ]
+  },
+  {
+    path: '/paper',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/student/paper'),
+        name: 'paper',
+        meta: { title: '考试页面', icon: 'documentation', noCache: true }
+      }
+    ]
   }
 ]
 
