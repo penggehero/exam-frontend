@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="formStyle">
     <div style="text-align: justify; margin-top: 20px;margin-left: 20px;">
       教师姓名：
       <el-input
@@ -17,11 +17,11 @@
       <el-button type="primary" plain icon="el-icon-search" @click="searchbuttonclick()">搜索</el-button>
       <el-button type="primary" plain icon="el-icon-refresh" @click="handclearsearch()">重置</el-button>
       <el-button type="primary" plain icon="el-icon-delete" @click="readyDelete()">刪除</el-button>
-      <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit()">管理</el-button>
+      <el-button type="primary" plain icon="el-icon-edit" @click="handleEdit()">修改</el-button>
     </div>
     <br>
     <br>
-
+    <br>
     <!-- 表格控件区 -->
     <el-table
       :data="tableData"
@@ -37,7 +37,8 @@
       <el-table-column prop="username" label="用户名" align="center" />
       <el-table-column prop="password" label="密码" align="center" />
       <el-table-column prop="name" label="姓名" align="center" />
-      <el-table-column prop="school" label="学校名称" align="center" />
+      <el-table-column prop="sex" label="性别" align="center" />
+      <el-table-column prop="work_id" label="工号" align="center" />
       <el-table-column prop="college" label="院系名称" align="center" />
     </el-table>
 
@@ -54,12 +55,52 @@
     />
 
     <!--删除对话框-->
-    <el-dialog class="g_form" :visible.sync="dialogDelVisible" :close-on-click-modal="false">
+    <el-dialog :visible.sync="dialogDelVisible" :close-on-click-modal="false" width="30%" center>
       <div>删除不可恢复，是否确定删除？</div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogDelVisible = false">取 消</el-button>
         <el-button type="primary" @click="handleDelete()">确 定</el-button>
       </span>
+    </el-dialog>
+
+    <el-dialog v-if="dialogDditVisible" :visible.sync="dialogDditVisible" :close-on-click-modal="false" width="30%" center>
+      <el-form ref="temp" :model="temp" label-position="left" :rules="rules">
+        <el-form-item label="用户名:" prop="username">
+          <el-input v-model="temp.username" placeholder="请输入用户名" />
+        </el-form-item>
+        <el-form-item label="密码:" prop="password">
+          <el-input v-model="temp.password" placeholder="请输入密码" />
+        </el-form-item>
+        <el-form-item label="真实姓名:" prop="name">
+          <el-input v-model="temp.name" placeholder="请输入用户名" />
+        </el-form-item>
+        <el-form-item label="性别:" prop="sex">
+          <el-radio-group v-model="temp.sex">
+            <el-radio :label="1">男</el-radio>
+            <el-radio :label="0">女</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="工号:" prop="work_id">
+          <el-input v-model="temp.work_id" type="number" placeholder="请输入工号" />
+        </el-form-item>
+        <el-form-item label="学院:" prop="college">
+          <el-select v-model="temp.college" placeholder="请选择学院">
+            <el-option label="计算机科学与信息学院" value="计算机科学与信息学院" />
+            <el-option label="经济管理与法学院" value="经济管理与法学院" />
+            <el-option label="马克思主义学院" value="马克思主义学院" />
+            <el-option label="体育学院" value="体育学院" />
+            <el-option label="文学院" value="文学院" />
+            <el-option label="外国语学院" value="外国语学院" />
+            <el-option label="音乐学院" value="音乐学院" />
+            <el-option label="机电与控制工程学院" value="机电与控制工程学院" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" plain icon="el-icon-refresh" @click="cancel()">取消</el-button>
+        <el-button type="primary" plain icon="el-icon-edit" @click="addSure()">修改</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -72,23 +113,39 @@ export default {
     return {
       tableData: [],
       t_name: '',
-      ops: [],
-      ops1: [],
+      temp: {
+        id: undefined,
+        college: undefined,
+        username: undefined,
+        password: undefined,
+        sex: undefined,
+        work_id: undefined,
+        name: undefined
+      },
+      rules: {
+        username: [{ required: true, message: '用户名不能为空!', trigger: 'blur' }, { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }],
+        password: [{ required: true, message: '密码不能为空!', trigger: 'blur' }, { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }],
+        name: [{ required: true, message: '真实姓名不能为空!', trigger: 'blur' }, { max: 10, message: '最长为 10 个字符', trigger: 'blur' }],
+        age: [{ required: true, message: '年龄不能为空!', trigger: 'blur' }, { max: 10, message: '最长为 10 个字符', trigger: 'blur' }],
+        college: [{ required: true, message: '学院不能为空!', trigger: 'blur' }],
+        sex: [{ required: true, message: '请选择性别', trigger: 'blur' }],
+        work_id: [{ required: true, message: '工号不能为空!', trigger: 'blur' }],
+        code: [{ required: true, message: '注册码不能为空!', trigger: 'blur' }]
+      },
       id: undefined,
       college: undefined,
       username: undefined,
       password: undefined,
-      school: undefined,
+      sex: undefined,
+      work_id: undefined,
       name: undefined,
       page: 1,
       rows: 10,
       resultlength: 10,
       g_p_name: '',
-      g_s_name: '',
-
       dialogDelVisible: false,
-      multipleTable: [], // 更新数据数据
-      ids: [] // 批量删除id
+      dialogDditVisible: false,
+      multipleTable: []
     }
   },
   created() {
@@ -105,7 +162,15 @@ export default {
       axios
         .get('/api/teacher/search', { params: this.getParam() })
         .then(res => {
-          this.tableData = res.data.resultData.datalist
+          var datalist2 = res.data.resultData.datalist
+          datalist2.forEach((value) => {
+            if (value.sex === 1) {
+              value.sex = '男'
+            } else if (value.sex === 0) {
+              value.sex = '女'
+            }
+          })
+          this.tableData = datalist2
           this.resultlength = res.data.resultData.total
         })
     },
@@ -132,19 +197,10 @@ export default {
     },
     // 删除事件
     handleDelete() {
-      const selectLength = this.multipleTable.length
-      var datalist = []
-      for (let i = 0; i < selectLength; i++) {
-        var ids = {}
-        this.multipleTable[i].isDel = 1
-        ids.id = this.multipleTable[i].id
-        ids.version = this.multipleTable[i].version
-        datalist.push(ids)
-      }
-      var data = {
-        modifierCode: this.$store.state.userInfo.code,
-        modifierName: this.$store.state.userInfo.name,
-        list: datalist
+      var data = {}
+      data.list = []
+      for (let i = 0; i < this.multipleTable.length; i++) {
+        data.list.push(this.multipleTable[i].id)
       }
       axios
         .put('/api/teacher/delete', data)
@@ -169,7 +225,7 @@ export default {
         .catch(() => {
           this.$notify({
             title: '错误信息',
-            message: '删除失败',
+            message: '操作失败',
             type: 'error',
             position: 'bottom-right'
           })
@@ -178,6 +234,18 @@ export default {
     },
     // 修改
     handleEdit() {
+      if (this.multipleTable.length === 0) {
+        if (this.notifyInstance) {
+          this.notifyInstance.close()
+        }
+        this.notifyInstance = this.$notify({
+          title: '警告信息',
+          message: '请选择一条数据',
+          type: 'warning',
+          position: 'bottom-right'
+        })
+        return
+      }
       if (this.multipleTable.length > 1) {
         if (this.notifyInstance) {
           this.notifyInstance.close()
@@ -190,10 +258,18 @@ export default {
         })
       } else {
         // 跳转页面
-        this.$router.push({
-          name: 'editArea',
-          params: Object.assign({}, this.multipleTable[0])
-        })
+        var te = this.multipleTable[0]
+        if (te.sex === '男') {
+          te.sex = 1
+        } else if (te.sex === '女') {
+          te.sex = 0
+        }
+        this.temp = te
+        this.dialogDditVisible = true
+        // this.$router.push({
+        //   name: 'editArea',
+        //   params: Object.assign({}, this.multipleTable[0])
+        // })
       }
     },
     // 搜索框
@@ -204,6 +280,40 @@ export default {
     handclearsearch() {
       this.t_name = undefined
       this.search()
+    },
+    cancel() {
+      this.temp = undefined
+      this.dialogDditVisible = false
+    }, addSure() {
+      axios
+        .put('/api/teacher/update', this.temp)
+        .then(response => {
+          if (response.data.status === 1) {
+            this.$notify({
+              title: '提示信息',
+              message: '操作成功',
+              type: 'success',
+              position: 'bottom-right'
+            })
+            this.search()
+            this.cancel()
+          } else {
+            this.$notify({
+              title: '错误信息',
+              message: response.data.msg,
+              type: 'error',
+              position: 'bottom-right'
+            })
+          }
+        })
+        .catch(() => {
+          this.$notify({
+            title: '错误信息',
+            message: '操作失败',
+            type: 'error',
+            position: 'bottom-right'
+          })
+        })
     },
     handleSizeChange: function(size) {
       this.rows = size
@@ -223,3 +333,8 @@ export default {
   }
 }
 </script>
+<style  scoped>
+.formStyle{
+  margin: 10px 10px 10px 10px;
+}
+</style>

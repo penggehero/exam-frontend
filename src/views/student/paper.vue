@@ -174,7 +174,7 @@ export default {
     this.search()
     this.singleLength = this.singleList.length
     this.doubleLength = this.doubleList.length
-    //this.timer()
+    // this.timer()
   },
   methods: {
     search() {

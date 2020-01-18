@@ -81,6 +81,16 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/studentRegister',
+    component: () => import('@/views/student/studentRegister'),
+    hidden: true
+  },
+  {
+    path: '/teacherRegister',
+    component: () => import('@/views/teacher/teacherRegister'),
+    hidden: true
+  },
+  {
     path: '/auth-redirect',
     component: () => import('@/views/login/auth-redirect'),
     hidden: true
@@ -166,7 +176,8 @@ const createRouter = () => {
   var userRole = sessionStorage.getItem('userRole')
   if (userRole) {
     console.log('改变页面!')
-    constantRoutes.length = 6
+    console.log('页面长度为' + constantRoutes.length)
+    constantRoutes.length = 8
     if (userRole === 'admin') {
       adminviews.forEach(item => {
         constantRoutes.push(item)
