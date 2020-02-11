@@ -1,7 +1,7 @@
 <template>
   <div class="formStyle">
     <div style="text-align: justify; margin-top: 20px;margin-left: 20px;">
-      教师姓名：
+      学生姓名：
       <el-input
         v-model="t_name"
         placeholder="请输入内容"
@@ -9,11 +9,10 @@
         clearable
         style="width: 20%;margin-bottom: 20px;"
         @keyup.enter.native="handleFilter"
-      />
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      工号：
+      /> &nbsp;&nbsp;&nbsp;&nbsp;
+      学号：
       <el-input
-        v-model="t_work_id"
+        v-model="t_school_id"
         placeholder="请输入内容"
         maxlength="15"
         clearable
@@ -41,15 +40,17 @@
       :header-cell-style="{background:'#ecf5ff',fontSize:'14px',color:'#606266'}"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" />
+      <el-table-column class="g_tableSelection" type="selection" />
       <el-table-column type="index" label="序号" width="60px" align="center" />
       <el-table-column v-if="false" prop="id" label="逻辑主键" align="center" />
       <el-table-column prop="username" label="用户名" align="center" />
       <el-table-column prop="password" label="密码" align="center" />
       <el-table-column prop="name" label="姓名" align="center" />
       <el-table-column prop="sex" label="性别" align="center" />
-      <el-table-column prop="work_id" label="工号" align="center" />
+      <el-table-column prop="school_id" label="学号" align="center" />
       <el-table-column prop="college" label="院系名称" align="center" />
+      <el-table-column prop="major" label="专业名称" align="center" />
+      <el-table-column prop="grade" label="所在年级" align="center" />
     </el-table>
 
     <!-- 分页控件区 -->
@@ -90,8 +91,8 @@
             <el-radio :label="0">女</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="工号:" prop="work_id">
-          <el-input v-model="temp.work_id" type="number" placeholder="请输入工号" />
+        <el-form-item label="学号:" prop="school_id">
+          <el-input v-model="temp.school_id" type="number" placeholder="请输入学号" />
         </el-form-item>
         <el-form-item label="学院:" prop="college">
           <el-select v-model="temp.college" placeholder="请选择学院">
@@ -104,6 +105,12 @@
             <el-option label="音乐学院" value="音乐学院" />
             <el-option label="机电与控制工程学院" value="机电与控制工程学院" />
           </el-select>
+        </el-form-item>
+        <el-form-item label="专业:" prop="major">
+          <el-input v-model="temp.major" placeholder="请输入专业" />
+        </el-form-item>
+        <el-form-item label="年级:" prop="grade">
+          <el-input v-model="temp.grade" type="number" placeholder="请输入年级" />
         </el-form-item>
       </el-form>
 
@@ -123,15 +130,16 @@ export default {
     return {
       tableData: [],
       t_name: '',
-      t_work_id: '',
+      t_school_id: '',
       temp: {
         id: undefined,
         college: undefined,
         username: undefined,
         password: undefined,
         sex: undefined,
-        work_id: undefined,
-        name: undefined
+        school_id: undefined,
+        major: undefined,
+        grade: undefined
       },
       rules: {
         username: [{ required: true, message: '用户名不能为空!', trigger: 'blur' }, { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }],
@@ -140,16 +148,18 @@ export default {
         age: [{ required: true, message: '年龄不能为空!', trigger: 'blur' }, { max: 10, message: '最长为 10 个字符', trigger: 'blur' }],
         college: [{ required: true, message: '学院不能为空!', trigger: 'blur' }],
         sex: [{ required: true, message: '请选择性别', trigger: 'blur' }],
-        work_id: [{ required: true, message: '工号不能为空!', trigger: 'blur' }],
-        code: [{ required: true, message: '注册码不能为空!', trigger: 'blur' }]
+        school_id: [{ required: true, message: '学号不能为空!', trigger: 'blur' }],
+        major: [{ required: true, message: '专业不能为空!', trigger: 'blur' }, { max: 10, message: '最长为 10 个字符', trigger: 'blur' }],
+        grade: [{ required: true, message: '年级不能为空!', trigger: 'blur' }, { max: 10, message: '最长为 10 个字符', trigger: 'blur' }]
       },
       id: undefined,
       college: undefined,
       username: undefined,
       password: undefined,
       sex: undefined,
-      work_id: undefined,
-      name: undefined,
+      school_id: undefined,
+      major: undefined,
+      grade: undefined,
       page: 1,
       rows: 10,
       resultlength: 10,
@@ -171,7 +181,7 @@ export default {
   methods: {
     search: function() {
       axios
-        .get('/api/teacher/search', { params: this.getParam() })
+        .get('/api/student/search', { params: this.getParam() })
         .then(res => {
           var datalist2 = res.data.resultData.datalist
           datalist2.forEach((value) => {
@@ -214,7 +224,7 @@ export default {
         data.list.push(this.multipleTable[i].id)
       }
       axios
-        .put('/api/teacher/delete', data)
+        .put('/api/student/delete', data)
         .then(response => {
           if (response.data.status === 1) {
             this.$notify({
@@ -290,22 +300,15 @@ export default {
     // 重置搜索框
     handclearsearch() {
       this.t_name = undefined
-      this.t_work_id = undefined
+      this.t_school_id = undefined
       this.search()
     },
     cancel() {
       this.temp = undefined
-      this.multipleTable.forEach((value) => {
-        if (value.sex === 1) {
-          value.sex = '男'
-        } else if (value.sex === 0) {
-          value.sex = '女'
-        }
-      })
       this.dialogDditVisible = false
     }, addSure() {
       axios
-        .put('/api/teacher/update', this.temp)
+        .put('/api/student/update', this.temp)
         .then(response => {
           if (response.data.status === 1) {
             this.$notify({
@@ -347,7 +350,7 @@ export default {
         page: this.page,
         rows: this.rows,
         name: this.t_name,
-        work_id: this.t_work_id
+        school_id: this.t_school_id
       }
     }
   }

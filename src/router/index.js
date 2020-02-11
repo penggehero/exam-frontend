@@ -18,6 +18,18 @@ const adminviews = [
         meta: { title: '教师管理', icon: 'documentation', noCache: true }
       }
     ]
+  },
+  {
+    path: '/studentManage',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/admin/studentManage'),
+        name: 'studentManage',
+        meta: { title: '学生管理', icon: 'documentation', noCache: true }
+      }
+    ]
   }
 ]
 
