@@ -305,6 +305,13 @@ export default {
     },
     cancel() {
       this.temp = undefined
+      this.multipleTable.forEach((value) => {
+        if (value.sex === 1) {
+          value.sex = '男'
+        } else if (value.sex === 0) {
+          value.sex = '女'
+        }
+      })
       this.dialogDditVisible = false
     }, addSure() {
       axios

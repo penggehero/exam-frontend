@@ -30,10 +30,58 @@ const adminviews = [
         meta: { title: '学生管理', icon: 'documentation', noCache: true }
       }
     ]
+  },
+  {
+    path: '/gradeManage',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/admin/gradeManage'),
+        name: 'gradeManage',
+        meta: { title: '成绩修改', icon: 'documentation', noCache: true }
+      }
+    ]
   }
 ]
 
 const teacherviews = [
+  {
+    path: '/paperManage',
+    component: Layout,
+    redirect: '/paperManage/index',
+    alwaysShow: true,
+    name: 'paperManage',
+    meta: { title: '试卷管理', icon: 'documentation', noCache: true },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/teacher/paperManage'),
+        name: '试卷修改',
+        meta: { title: '试卷修改' }
+      },
+      {
+        path: 'import',
+        component: () => import('@/views/teacher/import'),
+        name: '导入试卷',
+        meta: {
+          title: '导入试卷'
+        }
+      }
+    ]
+  },
+  // {
+  //   path: '/paperManage',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/teacher/paperManage'),
+  //       name: 'teacher',
+  //       meta: { title: '试卷管理', icon: 'documentation', noCache: true }
+  //     }
+  //   ]
+  // },
   {
     path: '/teacher',
     component: Layout,

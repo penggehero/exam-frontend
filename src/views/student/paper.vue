@@ -3,7 +3,6 @@
     <!-- 题目区域 -->
     <div class="nr_left">
       <div class="test">
-
         <!-- 标题 -->
         <div class="test_content">&nbsp;&nbsp;&nbsp;&nbsp;
           <el-button type="primary" round>单选题</el-button>
@@ -12,22 +11,24 @@
             <span>合计&nbsp;</span><span>60</span><span>&nbsp;分</span>
           </span>
         </div>
+        <br>
       </div>
       <!--  题目-->
       <div>
         <!-- 单选 -->
         <div v-for="(item,index) in singleList">
-          <div :id="'q_s_'+index" style="margin-left:2%;margin-top:10px">
-            <el-tag color="#409EFF" effect="dark" style="color:white">{{ index+1 }}</el-tag> &nbsp;&nbsp;
+          <div :id="'q_s_'+index" style="margin-left:2%;margin-top:10px;line-height:150%">
+            <el-tag color="#409EFF" effect="dark" style="color:white">{{ index+1 }}</el-tag>
             <span style="font-size: 10px;">({{ item.mark }}分)</span>
             <label>{{ item.name }}</label>
           </div>
           <el-radio-group v-model="singleAnswerList[index]" class="nr_question">
-            <div><el-radio :label="'A'+'|'+item.id">A. {{ item.q_A }}</el-radio> </div>
-            <div><el-radio :label="'B'+'|'+item.id">B.{{ item.q_B }}</el-radio> </div>
-            <div><el-radio :label="'C'+'|'+item.id">C. {{ item.q_C }}</el-radio></div>
-            <div><el-radio :label="'D'+'|'+item.id">D.{{ item.q_D }}</el-radio></div>
+            <div><el-radio :label="item.id+'|A'">A. {{ item.q_A }}</el-radio> </div>
+            <div><el-radio :label="item.id+'|B'">B.{{ item.q_B }}</el-radio> </div>
+            <div><el-radio :label="item.id+'|C'">C. {{ item.q_C }}</el-radio></div>
+            <div><el-radio :label="item.id+'|D'">D.{{ item.q_D }}</el-radio></div>
           </el-radio-group>
+          <br><br>
           <hr>
         </div>
         <div class="test">
@@ -41,16 +42,16 @@
           </div>
           <!-- 多选 -->
           <div v-for="(item,index) in doubleList">
-            <div :id="'q_s_'+index" style="margin-left:2%;margin-top:10px">
-              <el-tag color="#409EFF" effect="dark" style="color:white">{{ index+1 }}</el-tag> &nbsp;&nbsp;
+            <div :id="'q_d_'+index" style="margin-left:2%;margin-top:10px;line-height:150%">
+              <el-tag color="#409EFF" effect="dark" style="color:white">{{ index+1 }}</el-tag>
               <span style="font-size: 10px;">({{ item.mark }}分)</span>
               <label>{{ item.name }}</label>
             </div>
             <el-checkbox-group v-model="doubleAnswerList[index]" class="nr_question_d">
-              <div><el-checkbox :label="'A'+'|'+item.id">A. {{ item.q_A }}</el-checkbox> </div>
-              <div><el-checkbox :label="'B'+'|'+item.id">B.{{ item.q_B }}</el-checkbox> </div>
-              <div><el-checkbox :label="'C'+'|'+item.id">C. {{ item.q_C }}</el-checkbox></div>
-              <div><el-checkbox :label="'D'+'|'+item.id">D.{{ item.q_D }}</el-checkbox></div>
+              <div><el-checkbox :label="item.id+'|A'">A. {{ item.q_A }}</el-checkbox> </div>
+              <div><el-checkbox :label="item.id+'|B'">B.{{ item.q_B }}</el-checkbox> </div>
+              <div><el-checkbox :label="item.id+'|C'">C. {{ item.q_C }}</el-checkbox></div>
+              <div><el-checkbox :label="item.id+'|D'">D.{{ item.q_D }}</el-checkbox></div>
             </el-checkbox-group>
             <hr>
           </div>
@@ -64,13 +65,11 @@
             <strong>{{ timeSet.hour }}:{{ timeSet.minute }}:{{ timeSet.second }}</strong>
           </span>
           <span class="test_sumbit">
-            <el-button type="text" style="color: #fff;font-size: 18px">交卷</el-button>
+            <el-button type="text" style="color: #fff;font-size: 18px" @click="paper_sumbit()">交卷</el-button>
           </span>
         </div>
       </div>
     </div>
-    {{ singleAnswerList }}
-    {{ doubleAnswerList }}
     <!-- 答题卡区域 -->
     <div class="nr_right">
       <div class="nr_rt_main">
@@ -105,7 +104,7 @@
             <div class="answerSheet">
               <ul>
                 <li v-for="(item,index) in doubleLength" :id="'li_d_'+index">
-                  <a :href="'#q_s_'+index">{{ item }}</a>
+                  <a :href="'#q_d_'+index">{{ item }}</a>
                 </li>
               </ul>
             </div>
@@ -117,44 +116,22 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'Paper',
   data: () => {
     return {
+      paper_name: '',
       singleLength: 0,
       doubleLength: 0,
-      intDiff: 30,
+      intDiff: 1200,
       timeSet: {
         hour: 0,
         minute: 0,
         second: 0// 时间默认值
       },
-      singleList: [
-        {
-          id: 1,
-          p_id: 1,
-          number: 1,
-          name: '1+1=?',
-          mark: 1,
-          q_A: '2',
-          q_B: '3',
-          q_C: '-1',
-          q_D: '不知道'
-        }
-      ],
-      doubleList: [
-        {
-          id: 1,
-          p_id: 1,
-          number: 1,
-          name: '1+1=?',
-          mark: 1,
-          q_A: '2',
-          q_B: '3',
-          q_C: '-1',
-          q_D: '不知道'
-        }
-      ],
+      singleList: [],
+      doubleList: [],
       singleAnswerList: [],
       doubleAnswerList: [[]]
     }
@@ -166,19 +143,89 @@ export default {
     },
     doubleAnswerList(val) {
       val.forEach((value, index) => {
-        document.getElementById('li_d_' + index).className = 'hasBeenAnswer'
+        if (value.length > 0) {
+          document.getElementById('li_d_' + index).className = 'hasBeenAnswer'
+        }
       })
     }
   },
   created() {
     this.search()
-    this.singleLength = this.singleList.length
-    this.doubleLength = this.doubleList.length
     // this.timer()
   },
   methods: {
+    paper_sumbit() {
+      // if (this.singleAnswerList < this.singleLength || this.doubleAnswerList < this.doubleLength) {
+      //   this.notifyInstance = this.$notify({
+      //     title: '错误信息',
+      //     message: '有试题未完成!',
+      //     type: 'error',
+      //     position: 'bottom-right'
+      //   })
+      //   return
+      // }
+      var data1 = []
+      var data2 = []
+      this.singleAnswerList.forEach((value, index) => {
+        data1.push(value)
+      })
+      for (var j = 0; j < this.doubleAnswerList.length; j++) {
+        if (this.doubleAnswerList[j].length < 1) continue
+        var value = this.doubleAnswerList[j]
+        var str = ''
+        for (var i = 0; i < value.length; i++) {
+          var arr = value[i].split('|')
+          if (i === 0) str += arr[0] + '|'
+          str += arr[1] + '|'
+        }
+        data2.push(str.substring(0, str.length - 1))
+      }
+      axios
+        .post('/api/paper/submit', {
+          single: data1,
+          double: data2,
+          school_id: sessionStorage.getItem('id'),
+          student_name: sessionStorage.getItem('username'),
+          paper_id: 1,
+          paper_name: this.paper_name
+        })
+        .then(response => {
+          if (response.data.status === 1) {
+            this.$notify({
+              title: '提示信息',
+              message: '操作成功',
+              type: 'success',
+              position: 'bottom-right'
+            })
+          } else {
+            this.$notify({
+              title: '错误信息',
+              message: response.data.msg,
+              type: 'error',
+              position: 'bottom-right'
+            })
+          }
+        })
+    },
     search() {
-
+      axios
+        .get('/api/paper/getQuestion', { params: { paper_id: 1 }})
+        .then(res => {
+          this.paper_name = res.data.name
+          this.intDiff = res.data.time * 60
+          this.timer()
+          var list = res.data.resultData
+          list.forEach((value) => {
+            if (value.flag === 0) {
+              this.singleList.push(value)
+            } else if (value.flag === 1) {
+              this.doubleList.push(value)
+              this.doubleAnswerList.push([])
+            }
+          })
+          this.singleLength = this.singleList.length
+          this.doubleLength = this.doubleList.length
+        })
     },
     timer() {
       window.setInterval(() => {
@@ -260,12 +307,12 @@ export default {
     display: block;
 }
 .nr_question div{
-  margin-left: 70%;
-  margin-top: 10px;
+  margin-left: 50px;
+  margin-top: 15px;
 }
 .nr_question_d div{
-  margin-left: 6%;
-  margin-top: 10px;
+ margin-left: 50px;
+  margin-top: 15px;
 }
 .test {
     width: 100%;

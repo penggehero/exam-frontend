@@ -42,6 +42,10 @@ const actions = {
               'username',
               data.username
             )
+            sessionStorage.setItem(
+              'id',
+              data.id
+            )
             state.username = data.username
             commit('SET_TOKEN', data.token)
             setToken(data.token)
