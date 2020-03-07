@@ -97,8 +97,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'wp123',
-        password: '123'
+        username: 'wp321',
+        password: '321'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],

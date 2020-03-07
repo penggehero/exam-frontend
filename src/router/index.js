@@ -49,39 +49,32 @@ const teacherviews = [
   {
     path: '/paperManage',
     component: Layout,
-    redirect: '/paperManage/index',
+    redirect: '/paperManage',
     alwaysShow: true,
     name: 'paperManage',
     meta: { title: '试卷管理', icon: 'documentation', noCache: true },
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/teacher/paperManage'),
-        name: '试卷修改',
-        meta: { title: '试卷修改' }
-      },
-      {
         path: 'import',
         component: () => import('@/views/teacher/import'),
-        name: '导入试卷',
-        meta: {
-          title: '导入试卷'
-        }
+        name: 'import',
+        meta: { title: '试卷导入' }
+      },
+      {
+        path: 'paperManage',
+        component: () => import('@/views/teacher/paperManage'),
+        name: 'paperManage',
+        meta: { title: '试题管理' }
+      },
+      {
+        path: 'QuestionManage',
+        component: () => import('@/views/teacher/QuestionManage'),
+        name: 'QuestionManage',
+        hidden: true,
+        meta: { title: '试题管理' }
       }
     ]
   },
-  // {
-  //   path: '/paperManage',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/teacher/paperManage'),
-  //       name: 'teacher',
-  //       meta: { title: '试卷管理', icon: 'documentation', noCache: true }
-  //     }
-  //   ]
-  // },
   {
     path: '/teacher',
     component: Layout,
@@ -100,24 +93,32 @@ const studentrviews = [
   {
     path: '/student',
     component: Layout,
+    meta: { icon: 'documentation', noCache: true },
     children: [
       {
         path: 'index',
-        component: () => import('@/views/student/student'),
+        component: () => import('@/views/student/choose'),
         name: 'student',
-        meta: { title: '学生页面', icon: 'documentation', noCache: true }
+        meta: { title: '开始考试', icon: 'documentation', noCache: true }
+      },
+      {
+        path: 'paper',
+        component: () => import('@/views/student/paper'),
+        name: 'Paper',
+        hidden: true,
+        meta: { title: '考试页面', icon: 'documentation', noCache: true }
       }
     ]
   },
   {
-    path: '/paper',
+    path: '/grade',
     component: Layout,
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/student/paper'),
-        name: 'paper',
-        meta: { title: '考试页面', icon: 'documentation', noCache: true }
+        path: 'grade',
+        component: () => import('@/views/student/grade'),
+        name: 'grade',
+        meta: { title: '查看成绩', icon: 'documentation', noCache: true }
       }
     ]
   }

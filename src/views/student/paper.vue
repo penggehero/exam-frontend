@@ -85,7 +85,7 @@
           <div class="rt_content">
             <div class="rt_content_tt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <strong style="font-size: 18px;">单选题</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span style="font-size: 14px;">共&nbsp;<i>60</i>&nbsp;题</span>
+              <span style="font-size: 14px;">共&nbsp;<i>{{singleLength}}</i>&nbsp;题</span>
             </div>
             <div class="answerSheet">
               <ul>
@@ -99,7 +99,7 @@
           <div class="rt_content">
             <div class="rt_content_tt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <strong style="font-size: 18px;">多选题</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span style="font-size: 14px;">共&nbsp;<i>60</i>&nbsp;题</span>
+              <span style="font-size: 14px;">共&nbsp;<i>{{doubleLength}}</i>&nbsp;题</span>
             </div>
             <div class="answerSheet">
               <ul>
@@ -121,6 +121,7 @@ export default {
   name: 'Paper',
   data: () => {
     return {
+      paper_id: undefined,
       paper_name: '',
       singleLength: 0,
       doubleLength: 0,
@@ -150,8 +151,8 @@ export default {
     }
   },
   created() {
+    this.paper_id = this.$route.params.paper_id
     this.search()
-    // this.timer()
   },
   methods: {
     paper_sumbit() {
@@ -193,10 +194,11 @@ export default {
           if (response.data.status === 1) {
             this.$notify({
               title: '提示信息',
-              message: '操作成功',
+              message: '提交成功',
               type: 'success',
               position: 'bottom-right'
             })
+            this.$router.push('/student/index')
           } else {
             this.$notify({
               title: '错误信息',
@@ -208,8 +210,13 @@ export default {
         })
     },
     search() {
+      console.log(this.paper_id)
+      if (this.paper_id == undefined) {
+        this.$router.push('/student/index')
+        return
+      }
       axios
-        .get('/api/paper/getQuestion', { params: { paper_id: 1 }})
+        .get('/api/paper/getQuestion', { params: { paper_id: this.paper_id }})
         .then(res => {
           this.paper_name = res.data.name
           this.intDiff = res.data.time * 60

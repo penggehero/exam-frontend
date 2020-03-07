@@ -1,33 +1,24 @@
 <template>
   <div class="formStyle">
-    <div style="text-align: justify; margin-top: 20px;margin-left: 20px;">
-      试卷名称：
-      <el-input
-        v-model="t_name"
-        placeholder="请输入内容"
-        maxlength="15"
-        clearable
-        style="width: 20%;margin-bottom: 20px;"
-        @keyup.enter.native="handleFilter"
-      />  &nbsp;&nbsp;&nbsp;&nbsp;
-      出卷老师：
-      <el-input
-        v-model="t_teacher"
-        placeholder="请输入内容"
-        maxlength="15"
-        clearable
-        style="width: 20%;margin-bottom: 20px;"
-        @keyup.enter.native="handleFilter"
-      />
+    <div>
+      <el-row>
+        <el-col :span="10">&nbsp;</el-col>
+        <strong style="font-size: 60px;color:red">考前需知</strong>
+      </el-row> <br>
+      <el-row>
+        <el-col :span="8">&nbsp;</el-col>
+        <span style="font-size: 20px;color:red">1.&nbsp;进入考试后请不要刷新页面,否则自动退出考试!</span>
+      </el-row>
       <br>
+      <el-row>
+        <el-col :span="8">&nbsp;</el-col>
+        <span style="font-size: 20px;color:red">2.&nbsp;请在考试规定的时间作答,超出时间自动交卷!</span>
+      </el-row> <br>
+      <el-row>
+        <el-col :span="8">&nbsp;</el-col>
+        <span style="font-size: 20px;color:red">3.&nbsp;请遵守考试的规章制度,进入考试后请不要舞弊,抄袭!</span>
+      </el-row> <br>
     </div>
-    <div style=" border-radius: 10px;margin-bottom: 5px;margin-right:20px;float: right;">
-      <el-button type="primary" plain icon="el-icon-search" @click="search()">搜索</el-button>
-      <el-button type="primary" plain icon="el-icon-refresh" @click="handclearsearch()">重置</el-button>
-    </div>
-    <br>
-    <br>
-    <br>
     <!-- 表格控件区 -->
     <el-table
       :data="tableData"
@@ -45,7 +36,7 @@
       <el-table-column prop="mark" label="总分" align="center" />
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="enter(scope.row.id)">管理试题</el-button>
+          <el-button size="mini" type="primary" @click="enter(scope.row.id)">进入考试</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -70,9 +61,8 @@ export default {
   name: 'TeacherTable',
   data: () => {
     return {
+      school_id: sessionStorage.getItem('id'),
       tableData: [],
-      t_teacher: undefined,
-      t_name: undefined,
       page: 1,
       rows: 10,
       resultlength: 10
@@ -82,13 +72,9 @@ export default {
     this.search()
   },
   methods: {
-    handclearsearch() {
-      this.t_teacher = undefined
-      this.t_name = undefined
-    },
     search() {
       axios
-        .get('/api/paper/findByTeacher', { params: this.getParam() })
+        .get('/api/paper/search', { params: this.getParam() })
         .then(res => {
           this.tableData = res.data.resultData.datalist
           this.resultlength = res.data.resultData.total
@@ -111,10 +97,9 @@ export default {
     },
     getParam: function() {
       return {
-        teacher: this.t_teacher,
-        name: this.t_name,
         page: this.page,
-        rows: this.rows
+        rows: this.rows,
+        school_id: sessionStorage.getItem('id')
       }
     }
   }
