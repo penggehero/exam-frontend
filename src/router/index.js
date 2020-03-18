@@ -76,14 +76,21 @@ const teacherviews = [
     ]
   },
   {
-    path: '/teacher',
+    path: '/grade',
     component: Layout,
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/teacher/teacher'),
-        name: 'teacher',
-        meta: { title: '教师页面', icon: 'documentation', noCache: true }
+        path: 'rank',
+        component: () => import('@/views/teacher/rank'),
+        name: 'rank',
+        meta: { title: '查看排名', icon: 'documentation', noCache: true }
+      },
+      {
+        path: 'showRank',
+        component: () => import('@/views/teacher/showRank'),
+        name: 'showRank',
+        hidden: true,
+        meta: { title: '展示排名' }
       }
     ]
   }
@@ -175,7 +182,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
   }

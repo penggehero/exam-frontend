@@ -1,7 +1,7 @@
 <template>
   <div class="formStyle">
     <div style="text-align: justify; margin-top: 20px;margin-left: 20px;">
-      试卷名称：
+      学生姓名：
       <el-input
         v-model="t_name"
         placeholder="请输入内容"
@@ -10,24 +10,17 @@
         style="width: 20%;margin-bottom: 20px;"
         @keyup.enter.native="handleFilter"
       />  &nbsp;&nbsp;&nbsp;&nbsp;
-      出卷老师：
-      <el-input
-        v-model="t_teacher"
-        placeholder="请输入内容"
-        maxlength="15"
-        clearable
-        style="width: 20%;margin-bottom: 20px;"
-        @keyup.enter.native="handleFilter"
-      />
       <br>
     </div>
     <div style=" border-radius: 10px;margin-bottom: 5px;margin-right:20px;float: right;">
       <el-button type="primary" plain icon="el-icon-search" @click="search()">搜索</el-button>
       <el-button type="primary" plain icon="el-icon-refresh" @click="handclearsearch()">重置</el-button>
+      <el-button type="danger" plain icon="el-icon-back" @click="back()">返回</el-button>
     </div>
     <br>
     <br>
     <br>
+
     <!-- 表格控件区 -->
     <el-table
       :data="tableData"
@@ -38,16 +31,13 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column v-if="false" prop="id" label="逻辑主键" align="center" />
-      <el-table-column prop="name" label="试卷名称" align="center" />
-      <el-table-column prop="teacher" label="出卷老师" align="center" />
-      <el-table-column prop="number" label="试题数量" align="center" />
-      <el-table-column prop="time" label="考试时间(分钟)" align="center" />
+      <el-table-column prop="student_name" label="学生姓名" align="center" />
+      <el-table-column prop="school_id" label="学号" align="center" />
+      <el-table-column prop="paper_name" label="考试名称" align="center" />
+      <el-table-column prop="date" label="完成时间" align="center" />
+      <el-table-column prop="single_mark" label="单选题得分" align="center" />
+      <el-table-column prop="double_mark" label="多选题得分" align="center" />
       <el-table-column prop="mark" label="总分" align="center" />
-      <el-table-column label="操作" align="center">
-        <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="enter(scope.row.id)">管理试题</el-button>
-        </template>
-      </el-table-column>
     </el-table>
 
     <!-- 分页控件区 -->
@@ -67,35 +57,36 @@
 import axios from 'axios'
 
 export default {
-  name: 'TeacherTable',
+  name: 'ShowRank',
   data: () => {
     return {
+      paper_id: undefined,
+      t_name: '',
       tableData: [],
-      t_teacher: undefined,
-      t_name: undefined,
       page: 1,
       rows: 10,
       resultlength: 10
     }
   },
   created() {
+    this.paper_id = this.$route.params.paper_id
     this.search()
   },
   methods: {
-    handclearsearch() {
-      this.t_teacher = undefined
-      this.t_name = undefined
-    },
     search() {
       axios
-        .get('/api/paper/findByTeacher', { params: this.getParam() })
+        .get('/api/grade/search', { params: this.getParam() })
         .then(res => {
           this.tableData = res.data.resultData.datalist
           this.resultlength = res.data.resultData.total
         })
     },
-    enter: function(val) {
-      this.$router.push({ name: 'QuestionManage', params: { paper_id: val }})
+    handclearsearch() {
+      this.t_name = ''
+      this.search()
+    },
+    back() {
+      this.$router.push({ path: '/grade/rank' })
     },
     handleSizeChange: function(size) {
       this.rows = size
@@ -111,8 +102,8 @@ export default {
     },
     getParam: function() {
       return {
-        teacher: this.t_teacher,
-        name: this.t_name,
+        paper_id: this.paper_id,
+        student_name: this.t_name,
         page: this.page,
         rows: this.rows
       }

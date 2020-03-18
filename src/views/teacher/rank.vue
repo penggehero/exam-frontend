@@ -45,7 +45,7 @@
       <el-table-column prop="mark" label="总分" align="center" />
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="enter(scope.row.id)">管理试题</el-button>
+          <el-button size="mini" type="primary" @click="enter(scope.row.id)">查看排名</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -67,7 +67,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'TeacherTable',
+  name: 'Rank',
   data: () => {
     return {
       tableData: [],
@@ -95,7 +95,7 @@ export default {
         })
     },
     enter: function(val) {
-      this.$router.push({ name: 'QuestionManage', params: { paper_id: val }})
+      this.$router.push({ name: 'showRank', params: { paper_id: val }})
     },
     handleSizeChange: function(size) {
       this.rows = size
