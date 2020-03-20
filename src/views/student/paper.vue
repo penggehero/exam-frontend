@@ -7,8 +7,8 @@
         <div class="test_content">&nbsp;&nbsp;&nbsp;&nbsp;
           <el-button type="primary" round>单选题</el-button>
           <span style="font-size: 14px;"> &nbsp;&nbsp; &nbsp;&nbsp;
-            <span>共&nbsp;<span>60</span>&nbsp;题，</span>
-            <span>合计&nbsp;</span><span>60</span><span>&nbsp;分</span>
+            <span>共&nbsp;<span>{{ singleLength }}</span>&nbsp;题，</span>
+            <span>合计&nbsp;</span><span>{{ singleMark }}</span><span>&nbsp;分</span>
           </span>
         </div>
         <br>
@@ -16,17 +16,17 @@
       <!--  题目-->
       <div>
         <!-- 单选 -->
-        <div v-for="(item,index) in singleList">
+        <div v-for="(item,index) in singleList" :key="index">
           <div :id="'q_s_'+index" style="margin-left:2%;margin-top:10px;line-height:150%">
-            <el-tag color="#409EFF" effect="dark" style="color:white">{{ index+1 }}</el-tag>
+            <el-tag color="#409EFF" effect="dark" style="color:white">{{ item.number }}</el-tag>
             <span style="font-size: 10px;">({{ item.mark }}分)</span>
             <label>{{ item.name }}</label>
           </div>
           <el-radio-group v-model="singleAnswerList[index]" class="nr_question">
             <div><el-radio :label="item.id+'|A'">A. {{ item.q_A }}</el-radio> </div>
-            <div><el-radio :label="item.id+'|B'">B.{{ item.q_B }}</el-radio> </div>
+            <div><el-radio :label="item.id+'|B'">B. {{ item.q_B }}</el-radio> </div>
             <div><el-radio :label="item.id+'|C'">C. {{ item.q_C }}</el-radio></div>
-            <div><el-radio :label="item.id+'|D'">D.{{ item.q_D }}</el-radio></div>
+            <div><el-radio :label="item.id+'|D'">D. {{ item.q_D }}</el-radio></div>
           </el-radio-group>
           <br><br>
           <hr>
@@ -36,78 +36,118 @@
           <div class="test_content">&nbsp;&nbsp;&nbsp;&nbsp;
             <el-button type="primary" round>多选题</el-button>
             <span style="font-size: 14px;"> &nbsp;&nbsp; &nbsp;&nbsp;
-              <span>共&nbsp;<span>60</span>&nbsp;题，</span>
-              <span>合计&nbsp;</span><span>60</span><span>&nbsp;分</span>
+              <span>共&nbsp;<span>{{ doubleLength }}</span>&nbsp;题，</span>
+              <span>合计&nbsp;</span><span>{{ doubleMark }}</span><span>&nbsp;分</span>
             </span>
           </div>
           <!-- 多选 -->
-          <div v-for="(item,index) in doubleList">
+          <div v-for="(item,index) in doubleList" :key="index">
             <div :id="'q_d_'+index" style="margin-left:2%;margin-top:10px;line-height:150%">
-              <el-tag color="#409EFF" effect="dark" style="color:white">{{ index+1 }}</el-tag>
+              <el-tag color="#409EFF" effect="dark" style="color:white">{{ item.number }}</el-tag>
               <span style="font-size: 10px;">({{ item.mark }}分)</span>
               <label>{{ item.name }}</label>
             </div>
             <el-checkbox-group v-model="doubleAnswerList[index]" class="nr_question_d">
               <div><el-checkbox :label="item.id+'|A'">A. {{ item.q_A }}</el-checkbox> </div>
-              <div><el-checkbox :label="item.id+'|B'">B.{{ item.q_B }}</el-checkbox> </div>
+              <div><el-checkbox :label="item.id+'|B'">B. {{ item.q_B }}</el-checkbox> </div>
               <div><el-checkbox :label="item.id+'|C'">C. {{ item.q_C }}</el-checkbox></div>
-              <div><el-checkbox :label="item.id+'|D'">D.{{ item.q_D }}</el-checkbox></div>
+              <div><el-checkbox :label="item.id+'|D'">D. {{ item.q_D }}</el-checkbox></div>
             </el-checkbox-group>
             <hr>
           </div>
         </div>
-        <br><br><br><br>
-        <!-- 下方提示栏 -->
-        <div class="test_title">
-          &nbsp;&nbsp; &nbsp;&nbsp;
-          <strong style="color:red;font-size: 15px;">距离考试结束还剩:</strong> &nbsp;&nbsp;
-          <span style="color:red;font-size: 20px">
-            <strong>{{ timeSet.hour }}:{{ timeSet.minute }}:{{ timeSet.second }}</strong>
-          </span>
-          <span class="test_sumbit">
-            <el-button type="text" style="color: #fff;font-size: 18px" @click="paper_sumbit()">交卷</el-button>
-          </span>
-        </div>
-      </div>
-    </div>
-    <!-- 答题卡区域 -->
-    <div class="nr_right">
-      <div class="nr_rt_main">
-        <div class="rt_nr1">
-          <div class="rt_nr1_title">
-            <span>
-              <i class="el-icon-edit" style="color: #fff;font-size: 18px">
-                  &nbsp;
-                <strong>答题卡</strong>
-              </i>
+        <div class="test">
+          <!-- 标题 -->
+          <div class="test_content">&nbsp;&nbsp;&nbsp;&nbsp;
+            <el-button type="primary" round>判断题</el-button>
+            <span style="font-size: 14px;"> &nbsp;&nbsp; &nbsp;&nbsp;
+              <span>共&nbsp;<span>{{ judgeLength }}</span>&nbsp;题，</span>
+              <span>合计&nbsp;</span><span>{{ judgeLength }}</span><span>&nbsp;分</span>
             </span>
           </div>
-          <div class="rt_content">
-            <div class="rt_content_tt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <strong style="font-size: 18px;">单选题</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span style="font-size: 14px;">共&nbsp;<i>{{singleLength}}</i>&nbsp;题</span>
-            </div>
-            <div class="answerSheet">
-              <ul>
-                <li v-for="(item,index) in singleLength" :id="'li_s_'+index">
-                  <a :href="'#q_s_'+index">{{ item }}</a>
-                </li>
-              </ul>
-            </div>
-          </div>
 
-          <div class="rt_content">
-            <div class="rt_content_tt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <strong style="font-size: 18px;">多选题</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span style="font-size: 14px;">共&nbsp;<i>{{doubleLength}}</i>&nbsp;题</span>
+          <div v-for="(item,index) in judgeList" :key="index">
+            <div :id="'q_j_'+index" style="margin-left:2%;margin-top:10px;line-height:150%">
+              <el-tag color="#409EFF" effect="dark" style="color:white">{{ item.number }}</el-tag>
+              <span style="font-size: 10px;">({{ item.mark }}分)</span>
+              <label>{{ item.name }}</label>
             </div>
-            <div class="answerSheet">
-              <ul>
-                <li v-for="(item,index) in doubleLength" :id="'li_d_'+index">
-                  <a :href="'#q_d_'+index">{{ item }}</a>
-                </li>
-              </ul>
+            <el-radio-group v-model="judgeAnswerList[index]" class="nr_question">
+              <div><el-radio :label="item.id+'|1'">对</el-radio> </div>
+              <div><el-radio :label="item.id+'|0'">错</el-radio> </div>
+            </el-radio-group>
+            <br><br>
+            <hr>
+          </div>
+          <br><br>
+          <br><br><br><br>
+          <!-- 下方提示栏 -->
+          <div class="test_title">
+          &nbsp;&nbsp; &nbsp;&nbsp;
+            <strong style="color:red;font-size: 15px;">距离考试结束还剩:</strong> &nbsp;&nbsp;
+            <span style="color:red;font-size: 20px">
+              <strong>{{ timeSet.hour }}:{{ timeSet.minute }}:{{ timeSet.second }}</strong>
+            </span>
+            <span class="test_sumbit">
+              <el-button type="text" style="color: #fff;font-size: 18px" @click="paper_sumbit()">交卷</el-button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- 答题卡区域 -->
+      <div class="nr_right">
+        <div class="nr_rt_main">
+          <div class="rt_nr1">
+            <div class="rt_nr1_title">
+              <span>
+                <i class="el-icon-edit" style="color: #fff;font-size: 18px">
+                  &nbsp;
+                  <strong>答题卡</strong>
+                </i>
+              </span>
             </div>
+            <div class="rt_content">
+              <div class="rt_content_tt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <strong style="font-size: 18px;">单选题</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span style="font-size: 14px;">共&nbsp;<i>{{ singleLength }}</i>&nbsp;题</span>
+              </div>
+              <div class="answerSheet">
+                <ul>
+                  <li v-for="(item,index) in singleList" :id="'li_s_'+index" :key="index">
+                    <a :href="'#q_s_'+index">{{ item.number }}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="rt_content">
+              <div class="rt_content_tt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <strong style="font-size: 18px;">多选题</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span style="font-size: 14px;">共&nbsp;<i>{{ doubleLength }}</i>&nbsp;题</span>
+              </div>
+              <div class="answerSheet">
+                <ul>
+                  <li v-for="(item,index) in doubleList" :id="'li_d_'+index" :key="index">
+                    <a :href="'#q_d_'+index">{{ item.number }}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="rt_content">
+              <div class="rt_content_tt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <strong style="font-size: 18px;">多选题</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span style="font-size: 14px;">共&nbsp;<i>{{ judgeLength }}</i>&nbsp;题</span>
+              </div>
+              <div class="answerSheet">
+                <ul>
+                  <li v-for="(item,index) in judgeList" :id="'li_j_'+index" :key="index">
+                    <a :href="'#q_j_'+index">{{ item.number }}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -124,7 +164,11 @@ export default {
       paper_id: undefined,
       paper_name: '',
       singleLength: 0,
+      judgeLength: 0,
       doubleLength: 0,
+      singleMark: 0,
+      doubleMark: 0,
+      judgeMark: 0,
       intDiff: 1200,
       timeSet: {
         hour: 0,
@@ -133,7 +177,9 @@ export default {
       },
       singleList: [],
       doubleList: [],
+      judgeList: [],
       singleAnswerList: [],
+      judgeAnswerList: [],
       doubleAnswerList: [[]]
     }
   }, watch: {
@@ -142,10 +188,17 @@ export default {
         document.getElementById('li_s_' + index).className = 'hasBeenAnswer'
       })
     },
+    judgeAnswerList(val) {
+      val.forEach((value, index) => {
+        document.getElementById('li_j_' + index).className = 'hasBeenAnswer'
+      })
+    },
     doubleAnswerList(val) {
       val.forEach((value, index) => {
         if (value.length > 0) {
           document.getElementById('li_d_' + index).className = 'hasBeenAnswer'
+        } else {
+          if (document.getElementById('li_d_' + index) != null) { document.getElementById('li_d_' + index).className = 'hasNoAnswer' }
         }
       })
     }
@@ -167,8 +220,12 @@ export default {
       // }
       var data1 = []
       var data2 = []
+      var date3 = []
       this.singleAnswerList.forEach((value, index) => {
         data1.push(value)
+      })
+      this.judgeAnswerList.forEach((value, index) => {
+        date3.push(value)
       })
       for (var j = 0; j < this.doubleAnswerList.length; j++) {
         if (this.doubleAnswerList[j].length < 1) continue
@@ -185,9 +242,10 @@ export default {
         .post('/api/paper/submit', {
           single: data1,
           double: data2,
+          judge: date3,
           school_id: sessionStorage.getItem('id'),
           student_name: sessionStorage.getItem('username'),
-          paper_id: 1,
+          paper_id: this.paper_id,
           paper_name: this.paper_name
         })
         .then(response => {
@@ -210,8 +268,7 @@ export default {
         })
     },
     search() {
-      console.log(this.paper_id)
-      if (this.paper_id == undefined) {
+      if (this.paper_id === undefined) {
         this.$router.push('/student/index')
         return
       }
@@ -225,13 +282,19 @@ export default {
           list.forEach((value) => {
             if (value.flag === 0) {
               this.singleList.push(value)
+              this.singleMark += value.mark
             } else if (value.flag === 1) {
               this.doubleList.push(value)
+              this.doubleMark += value.mark
               this.doubleAnswerList.push([])
+            } else if (value.flag === 2) {
+              this.judgeList.push(value)
+              this.judgeMark += value.mark
             }
           })
           this.singleLength = this.singleList.length
           this.doubleLength = this.doubleList.length
+          this.judgeLength = this.judgeList.length
         })
     },
     timer() {
@@ -266,7 +329,7 @@ export default {
     width: 100%;
     padding-left: 1020px;
     height: 100%;
-    float: right;
+    float: left;
 }
 .rt_nr1 {
     width: 280px;
@@ -352,6 +415,11 @@ text-align: center;
 .hasBeenAnswer {
     background: #409EFF;
     color: #fff;
+}
+.hasNoAnswer{
+    margin: 0;
+    padding: 0;
+
 }
 
 </style>

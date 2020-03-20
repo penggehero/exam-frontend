@@ -52,7 +52,7 @@ const teacherviews = [
     redirect: '/paperManage',
     alwaysShow: true,
     name: 'paperManage',
-    meta: { title: '试卷管理', icon: 'documentation', noCache: true },
+    meta: { title: '试卷管理', icon: 'list', noCache: true },
     children: [
       {
         path: 'import',
@@ -83,7 +83,7 @@ const teacherviews = [
         path: 'rank',
         component: () => import('@/views/teacher/rank'),
         name: 'rank',
-        meta: { title: '查看排名', icon: 'documentation', noCache: true }
+        meta: { title: '查看排名', icon: 'peoples', noCache: true }
       },
       {
         path: 'showRank',
@@ -91,6 +91,18 @@ const teacherviews = [
         name: 'showRank',
         hidden: true,
         meta: { title: '展示排名' }
+      }
+    ]
+  },
+  {
+    path: '/userInfo',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/teacher/personal'),
+        name: 'userInfo',
+        meta: { title: '信息维护', icon: 'user', noCache: true }
       }
     ]
   }
@@ -106,7 +118,7 @@ const studentrviews = [
         path: 'index',
         component: () => import('@/views/student/choose'),
         name: 'student',
-        meta: { title: '开始考试', icon: 'documentation', noCache: true }
+        meta: { title: '开始考试', icon: 'edit', noCache: true }
       },
       {
         path: 'paper',
@@ -125,7 +137,31 @@ const studentrviews = [
         path: 'grade',
         component: () => import('@/views/student/grade'),
         name: 'grade',
-        meta: { title: '查看成绩', icon: 'documentation', noCache: true }
+        meta: { title: '查看成绩', icon: 'list', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/error',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/student/wrongQuestion'),
+        name: 'error',
+        meta: { title: '查看错题', icon: 'eye-open', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/userInfo',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/student/personal'),
+        name: 'userInfo',
+        meta: { title: '信息维护', icon: 'user', noCache: true }
       }
     ]
   }

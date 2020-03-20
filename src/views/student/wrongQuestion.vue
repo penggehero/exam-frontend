@@ -1,15 +1,25 @@
 <template>
   <div class="formStyle">
     <div style="text-align: justify; margin-top: 20px;margin-left: 20px;">
-      考试名称：
-      <el-input
-        v-model="t_name"
-        placeholder="请输入内容"
-        maxlength="15"
-        clearable
-        style="width: 20%;margin-bottom: 20px;"
-        @keyup.enter.native="handleFilter"
-      /> &nbsp;&nbsp;&nbsp;&nbsp;
+      选择试卷：
+      <el-select v-model="t_paper" placeholder="请选择">
+        <el-option
+          v-for="item in papers"
+          :key="item.paper_id"
+          :label="item.name"
+          :value="item.paper_id"
+        />
+      </el-select>&nbsp;&nbsp;&nbsp;&nbsp;
+      试题类型：
+      <el-select v-model="t_type" placeholder="请选择">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+      <br>
       <br>
       <br>
     </div>
@@ -30,14 +40,17 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column v-if="false" prop="id" label="逻辑主键" align="center" />
-      <el-table-column prop="student_name" label="学生姓名" align="center" />
-      <el-table-column prop="school_id" label="学号" align="center" />
-      <el-table-column prop="paper_name" label="考试名称" align="center" />
-      <el-table-column prop="date" label="完成时间" align="center" />
-      <el-table-column prop="single_mark" label="单选题得分" align="center" />
-      <el-table-column prop="double_mark" label="多选题得分" align="center" />
-      <el-table-column prop="judge_mark" label="判断题得分" align="center" />
-      <el-table-column prop="mark" label="总分" align="center" />
+      <el-table-column prop="paper_name" width="60px" label="试卷名称" align="center" />
+      <el-table-column prop="number" width="60px" label="题目编号" align="center" />
+      <el-table-column prop="flag" label="题目类型" width="80px" align="center" />
+      <el-table-column prop="name" label="题目名称" align="center" />
+      <el-table-column prop="mark" width="50px" label="分值" align="center" />
+      <el-table-column prop="q_A" width="100px" label="A选项" align="center" />
+      <el-table-column prop="q_B" width="100px" label="B选项" align="center" />
+      <el-table-column prop="q_C" width="100px" label="C选项" align="center" />
+      <el-table-column prop="q_D" width="100px" label="D选项" align="center" />
+      <el-table-column prop="answer" width="60px" label="正确答案" align="center" />
+      <el-table-column prop="wrong_answer" width="60px" label="错误答案" align="center" />
     </el-table>
 
     <!-- 分页控件区 -->
@@ -57,12 +70,19 @@
 import axios from 'axios'
 
 export default {
-  name: 'TeacherTable',
+  name: 'WrongQuestion',
   data: () => {
     return {
       school_id: sessionStorage.getItem('id'),
+      options: [
+        { value: 0, label: '单选题' },
+        { value: 1, label: '多选题' },
+        { value: 2, label: '判断题' }
+      ],
+      papers: [],
+      t_type: undefined,
+      t_paper: undefined,
       tableData: [],
-      t_name: '',
       page: 1,
       rows: 10,
       resultlength: 10
@@ -72,20 +92,19 @@ export default {
     this.search()
   },
   methods: {
-    handclearsearch() {
-      this.t_name = ''
-      this.search()
-    },
     search() {
       axios
-        .get('/api/grade/search', { params: this.getParam() })
+        .get('/api/wrong/search', { params: this.getParam() })
         .then(res => {
           this.tableData = res.data.resultData.datalist
           this.resultlength = res.data.resultData.total
+          this.papers = res.data.resultData.papers
         })
     },
-    enter: function(val) {
-      alert(val)
+    handclearsearch() {
+      this.t_type = undefined
+      this.t_paper = undefined
+      this.search()
     },
     handleSizeChange: function(size) {
       this.rows = size
@@ -103,8 +122,9 @@ export default {
       return {
         page: this.page,
         rows: this.rows,
-        school_id: this.school_id,
-        paper_name: this.t_name
+        school_id: sessionStorage.getItem('id'),
+        type: this.t_type,
+        paper_id: this.t_paper
       }
     }
   }
@@ -114,4 +134,5 @@ export default {
 .formStyle{
   margin: 10px 10px 10px 10px;
 }
+
 </style>

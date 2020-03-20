@@ -3,21 +3,21 @@
     <div>
       <el-row>
         <el-col :span="10">&nbsp;</el-col>
-        <strong style="font-size: 60px;color:red">考前需知</strong>
+        <strong class="text1">考前需知</strong>
       </el-row> <br>
       <el-row>
         <el-col :span="8">&nbsp;</el-col>
-        <span style="font-size: 20px;color:red">1.&nbsp;进入考试后请不要刷新页面,否则自动退出考试!</span>
+        <span class="text2">1.&nbsp;进入考试后请不要刷新页面,否则自动退出考试!</span>
       </el-row>
       <br>
       <el-row>
         <el-col :span="8">&nbsp;</el-col>
-        <span style="font-size: 20px;color:red">2.&nbsp;请在考试规定的时间作答,超出时间自动交卷!</span>
+        <span class="text2">2.&nbsp;请在考试规定的时间作答,超出时间自动交卷!</span>
       </el-row> <br>
       <el-row>
         <el-col :span="8">&nbsp;</el-col>
-        <span style="font-size: 20px;color:red">3.&nbsp;请遵守考试的规章制度,进入考试后请不要舞弊,抄袭!</span>
-      </el-row> <br>
+        <span class="text2">3.&nbsp;请遵守考试的规章制度,进入考试后请不要舞弊,抄袭!</span>
+      </el-row> <br> <br>
     </div>
     <!-- 表格控件区 -->
     <el-table
@@ -108,5 +108,11 @@ export default {
 <style  scoped>
 .formStyle{
   margin: 10px 10px 10px 10px;
+}
+.text1{
+font-size: 60px;color:red;
+}
+.text2{
+  font-size: 20px;color:red;
 }
 </style>

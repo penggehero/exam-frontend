@@ -2,7 +2,7 @@
   <div>
     <br>
     <el-row>
-      <el-col :span="8">&nbsp;</el-col>
+      <el-col :span="7">&nbsp;</el-col>
       <img src="../../img/logo1.png" alt="学校图标">
     </el-row>
     <br>
@@ -21,8 +21,8 @@
           </el-form-item>
           <el-form-item label="性别:" prop="sex">
             <el-radio-group v-model="ruleForm.sex">
-              <el-radio label="男" value="1" />
-              <el-radio label="女" value="0" />
+              <el-radio :label="1">男</el-radio>
+              <el-radio :label="0">女</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="学号:" prop="school_id">
@@ -47,11 +47,11 @@
             <el-input v-model="ruleForm.grade" type="number" placeholder="请输入年级" />
           </el-form-item>
           <el-form-item>
-            <span>  <el-button type="primary" @click="back()">返回登录页</el-button>
+            <span>  <el-button type="primary" @click="back()">返回首页</el-button>
             &nbsp;&nbsp;&nbsp;&nbsp;
               <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
             </span>
-            <span style="float:right;"><el-button type="success" @click="submitForm('ruleForm')">注册</el-button></span>
+            <span style="float:right;"><el-button type="success" @click="submitForm('ruleForm')">修改</el-button></span>
           </el-form-item>
         </el-form>
       </el-col>
@@ -60,10 +60,13 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
+  name: 'Personal',
   data() {
     return {
       ruleForm: {
+        id: '',
         username: '',
         password: '',
         name: '',
@@ -73,6 +76,7 @@ export default {
         school_id: '',
         sex: ''
       },
+      temp: undefined,
       rules: {
         username: [{ required: true, message: '用户名不能为空!', trigger: 'blur' }, { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }],
         password: [{ required: true, message: '密码不能为空!', trigger: 'blur' }, { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }],
@@ -86,13 +90,67 @@ export default {
       }
     }
   },
+  created() {
+    axios
+      .get('/api/student/searchPerson', { params: { school_id: sessionStorage.getItem('id') }})
+      .then(res => {
+        this.temp = res.data.resultData
+        this.ruleForm = JSON.parse(JSON.stringify(this.temp))
+      })
+  },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.ruleForm)
+          var newObj = JSON.parse(JSON.stringify(this.ruleForm))
+          if (this.temp.username === this.ruleForm.username) {
+            delete newObj.username
+          } if (this.temp.password === this.ruleForm.password) {
+            delete newObj.password
+          } if (this.temp.name === this.ruleForm.name) {
+            delete newObj.name
+          } if (this.temp.age === this.ruleForm.age) {
+            delete newObj.age
+          } if (this.temp.college === this.ruleForm.college) {
+            delete newObj.college
+          } if (this.temp.sex === this.ruleForm.sex) {
+            delete newObj.sex
+          } if (this.temp.school_id === this.ruleForm.school_id) {
+            delete newObj.school_id
+          } if (this.temp.major === this.ruleForm.major) {
+            delete newObj.major
+          } if (this.temp.grade === this.ruleForm.grade) {
+            delete newObj.grade
+          }
         } else {
-          console.log('error submit!!')
+          axios
+            .put('/api/student/update', newObj)
+            .then(response => {
+              if (response.data.status === 1) {
+                this.$notify({
+                  title: '提示信息',
+                  message: '操作成功',
+                  type: 'success',
+                  position: 'bottom-right'
+                })
+                this.$router.push('/')
+              } else {
+                this.$notify({
+                  title: '错误信息',
+                  message: response.data.msg,
+                  type: 'error',
+                  position: 'bottom-right'
+                })
+              }
+            })
+            .catch(() => {
+              this.$notify({
+                title: '错误信息',
+                message: '操作失败',
+                type: 'error',
+                position: 'bottom-right'
+              })
+            })
           return false
         }
       })

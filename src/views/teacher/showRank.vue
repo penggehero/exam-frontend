@@ -37,6 +37,7 @@
       <el-table-column prop="date" label="完成时间" align="center" />
       <el-table-column prop="single_mark" label="单选题得分" align="center" />
       <el-table-column prop="double_mark" label="多选题得分" align="center" />
+      <el-table-column prop="judge_mark" label="判断题得分" align="center" />
       <el-table-column prop="mark" label="总分" align="center" />
     </el-table>
 

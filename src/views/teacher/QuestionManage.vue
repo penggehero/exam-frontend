@@ -149,7 +149,8 @@ export default {
       t_type: '',
       options: [
         { value: 0, label: '单选题' },
-        { value: 1, label: '多选题' }
+        { value: 1, label: '多选题' },
+        { value: 2, label: '判断题' }
       ],
       temp: {
         id: undefined,
@@ -408,8 +409,10 @@ export default {
           answers.forEach(element => {
             this.temp.answer.push(element)
           })
-        } else {
+        } else if (this.temp.flag === 0) {
           this.temp.answer = this.multipleTable[0].answer
+        } else {
+          this.temp.answer = this.multipleTable[0].answer === '对' ? '1' : '0'
         }
         this.dialogDditVisible = true
       }

@@ -85,8 +85,11 @@
         <el-form-item label="单选题得分:" prop="single_mark">
           <el-input v-model="temp.single_mark" type="number" placeholder="请输入得分" />
         </el-form-item>
-        <el-form-item label="多选题得分:" prop="single_mark">
+        <el-form-item label="多选题得分:" prop="double_mark">
           <el-input v-model="temp.double_mark" type="number" placeholder="请输入得分" />
+        </el-form-item>
+        <el-form-item label="判断题得分:" prop="judge_mark">
+          <el-input v-model="temp.judge_mark" type="number" placeholder="请输入得分" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -112,6 +115,7 @@ export default {
         school_id: undefined,
         single_mark: undefined,
         double_mark: undefined,
+        judge_mark: undefined,
         mark: undefined
       },
       rules: {
@@ -136,6 +140,7 @@ export default {
       this.temp.student_name = undefined
       this.temp.single_mark = undefined
       this.temp.double_mark = undefined
+      this.temp.judge_mark = undefined
       this.temp.mark = undefined
     },
     handclearsearch() {
@@ -165,7 +170,7 @@ export default {
         })
         return
       }
-      this.temp.mark = parseInt(this.temp.single_mark) + parseInt(this.temp.double_mark)
+      this.temp.mark = parseInt(this.temp.single_mark) + parseInt(this.temp.double_mark) + parseInt(this.temp.judge_mark)
       axios
         .put('/api/grade/update', this.temp)
         .then(response => {
@@ -229,6 +234,7 @@ export default {
         this.temp.student_name = te.student_name
         this.temp.single_mark = te.single_mark
         this.temp.double_mark = te.double_mark
+        this.temp.judge_mark = te.judge_mark
         this.dialogDditVisible = true
       }
     },

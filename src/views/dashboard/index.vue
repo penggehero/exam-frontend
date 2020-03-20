@@ -5,14 +5,14 @@
       <el-col :span="7">&nbsp;</el-col>
       <img src="../../img/logo1.png" alt="学校图标">
     </el-row>
-     <br>
+    <br>
     <el-row>
       <el-col :span="8">&nbsp;</el-col>
       <div>
-        <strong style="font-size: 42px; font-family:SimSun">&nbsp;欢迎登录线上考试系统!</strong>
+        <strong style="font-size: 42px; font-family:SimSun;padding-left:30px">欢迎登录线上考试系统!</strong>
       </div>
     </el-row>
-     <br>
+    <br><br>
     <div class="formStyle">
       <span>Designed by Wu Peng</span>
     </div>

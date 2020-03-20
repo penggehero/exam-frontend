@@ -14,7 +14,7 @@
             <el-input v-model="ruleForm.username" placeholder="请输入用户名" />
           </el-form-item>
           <el-form-item label="密码:" prop="password">
-            <el-input v-model="ruleForm.password" type="password" placeholder="请输入密码" />
+            <el-input v-model="ruleForm.password" show-password placeholder="请输入密码" />
           </el-form-item>
           <el-form-item label="真实姓名:" prop="name">
             <el-input v-model="ruleForm.name" placeholder="请输入用户名" />
@@ -96,10 +96,7 @@ export default {
                   type: 'success',
                   position: 'bottom-right'
                 })
-                this.$refs[formName].resetFields()
-                setTimeout(() => {
-                  this.$router.push('/login')
-                }, 2000)
+                this.$router.push('/')
               } else {
                 this.$notify({
                   title: '错误信息',
