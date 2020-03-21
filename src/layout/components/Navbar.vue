@@ -4,13 +4,13 @@
 
     <breadcrumb class="breadcrumb-container" />
     <div class="right-menu">
-      <span style="float: left">{{ username }}</span>
+      <span style="float: left;padding-right:10px"> {{ username }}</span>
       <el-dropdown
         class="avatar-container"
         trigger="click"
       >
         <div class="avatar-wrapper">
-          <img src="../../img/1.jpg" class="user-avatar">
+          <img src="../../img/user.jpg" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">

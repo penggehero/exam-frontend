@@ -50,7 +50,7 @@
       <el-table-column prop="q_C" width="100px" label="C选项" align="center" />
       <el-table-column prop="q_D" width="100px" label="D选项" align="center" />
       <el-table-column prop="answer" width="60px" label="正确答案" align="center" />
-      <el-table-column prop="wrong_answer" width="60px" label="错误答案" align="center" />
+      <el-table-column prop="wrong_answer" width="60px" label="你的答案" align="center" />
     </el-table>
 
     <!-- 分页控件区 -->

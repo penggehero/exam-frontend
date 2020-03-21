@@ -57,7 +57,7 @@
           size="small"
           type="success"
           @click="submitUpload"
-        >上传文件<i class="el-icon-upload el-icon--right" /></el-button>
+        >导入试卷<i class="el-icon-upload el-icon--right" /></el-button>
       </div><br>
     </div>
   </div>
@@ -133,6 +133,9 @@ export default {
           position: 'bottom-right'
         })
         this.clear()
+        setTimeout(() => {
+          this.$router.push('/paperManage/paperManage')
+        }, 1500)
       } else {
         this.$notify({
           title: '提示信息',

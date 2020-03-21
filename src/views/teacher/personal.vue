@@ -42,8 +42,6 @@
           </el-form-item>
           <el-form-item>
             <span>  <el-button type="primary" @click="back()">返回首页</el-button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-              <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
             </span>
             <span style="float:right;"><el-button type="success" @click="submitForm('ruleForm')">修改</el-button></span>
           </el-form-item>
@@ -117,7 +115,9 @@ export default {
                   type: 'success',
                   position: 'bottom-right'
                 })
-                this.$router.push('/')
+                setTimeout(() => {
+                  this.$router.push('/')
+                }, 1500)
               } else {
                 this.$notify({
                   title: '错误信息',

@@ -80,7 +80,7 @@
             <hr>
           </div>
           <br><br>
-          <br><br><br><br>
+          <br><br>
           <!-- 下方提示栏 -->
           <div class="test_title">
           &nbsp;&nbsp; &nbsp;&nbsp;
@@ -136,7 +136,7 @@
 
             <div class="rt_content">
               <div class="rt_content_tt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <strong style="font-size: 18px;">多选题</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <strong style="font-size: 18px;">判断题</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <span style="font-size: 14px;">共&nbsp;<i>{{ judgeLength }}</i>&nbsp;题</span>
               </div>
               <div class="answerSheet">
@@ -209,15 +209,15 @@ export default {
   },
   methods: {
     paper_sumbit() {
-      // if (this.singleAnswerList < this.singleLength || this.doubleAnswerList < this.doubleLength) {
-      //   this.notifyInstance = this.$notify({
-      //     title: '错误信息',
-      //     message: '有试题未完成!',
-      //     type: 'error',
-      //     position: 'bottom-right'
-      //   })
-      //   return
-      // }
+      if (this.singleAnswerList < this.singleLength || this.doubleAnswerList < this.doubleLength || this.judgeAnswerList < this.judgeLength) {
+        this.notifyInstance = this.$notify({
+          title: '错误信息',
+          message: '有试题未完成!',
+          type: 'error',
+          position: 'bottom-right'
+        })
+        return
+      }
       var data1 = []
       var data2 = []
       var date3 = []
@@ -298,10 +298,21 @@ export default {
         })
     },
     timer() {
-      window.setInterval(() => {
+      // 设置定时任务
+      var timer = window.setInterval(() => {
         this.intDiff--
         if (this.intDiff <= 0) {
-          alert('考试已结束!')
+          this.paper_sumbit()
+          this.$notify({
+            title: '提示信息',
+            message: '超出时间限制!考试已结束!',
+            type: 'error',
+            position: 'bottom-right'
+          })
+          clearInterval(timer)
+          setTimeout(() => {
+            this.$router.push('/')
+          }, 1500)
         }
         if (this.intDiff > 0) {
           this.timeSet.hour = Math.floor(this.intDiff / (60 * 60))

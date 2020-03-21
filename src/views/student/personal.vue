@@ -48,8 +48,6 @@
           </el-form-item>
           <el-form-item>
             <span>  <el-button type="primary" @click="back()">返回首页</el-button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-              <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
             </span>
             <span style="float:right;"><el-button type="success" @click="submitForm('ruleForm')">修改</el-button></span>
           </el-form-item>
@@ -81,12 +79,11 @@ export default {
         username: [{ required: true, message: '用户名不能为空!', trigger: 'blur' }, { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }],
         password: [{ required: true, message: '密码不能为空!', trigger: 'blur' }, { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }],
         name: [{ required: true, message: '真实姓名不能为空!', trigger: 'blur' }, { max: 10, message: '最长为 10 个字符', trigger: 'blur' }],
-        age: [{ required: true, message: '年龄不能为空!', trigger: 'blur' }, { max: 10, message: '最长为 10 个字符', trigger: 'blur' }],
         college: [{ required: true, message: '学院不能为空!', trigger: 'blur' }],
         sex: [{ required: true, message: '请选择性别', trigger: 'blur' }],
         school_id: [{ required: true, message: '学号不能为空!', trigger: 'blur' }],
         major: [{ required: true, message: '专业不能为空!', trigger: 'blur' }, { max: 10, message: '最长为 10 个字符', trigger: 'blur' }],
-        grade: [{ required: true, message: '年级不能为空!', trigger: 'blur' }, { max: 10, message: '最长为 10 个字符', trigger: 'blur' }]
+        grade: [{ required: true, message: '年级不能为空!', trigger: 'blur' }]
       }
     }
   },
@@ -122,7 +119,6 @@ export default {
           } if (this.temp.grade === this.ruleForm.grade) {
             delete newObj.grade
           }
-        } else {
           axios
             .put('/api/student/update', newObj)
             .then(response => {
@@ -133,7 +129,9 @@ export default {
                   type: 'success',
                   position: 'bottom-right'
                 })
-                this.$router.push('/')
+                setTimeout(() => {
+                  this.$router.push('/')
+                }, 1500)
               } else {
                 this.$notify({
                   title: '错误信息',
@@ -151,6 +149,7 @@ export default {
                 position: 'bottom-right'
               })
             })
+        } else {
           return false
         }
       })

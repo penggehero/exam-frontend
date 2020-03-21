@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -77,12 +78,11 @@ export default {
         username: [{ required: true, message: '用户名不能为空!', trigger: 'blur' }, { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }],
         password: [{ required: true, message: '密码不能为空!', trigger: 'blur' }, { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }],
         name: [{ required: true, message: '真实姓名不能为空!', trigger: 'blur' }, { max: 10, message: '最长为 10 个字符', trigger: 'blur' }],
-        age: [{ required: true, message: '年龄不能为空!', trigger: 'blur' }, { max: 10, message: '最长为 10 个字符', trigger: 'blur' }],
         college: [{ required: true, message: '学院不能为空!', trigger: 'blur' }],
         sex: [{ required: true, message: '请选择性别', trigger: 'blur' }],
         school_id: [{ required: true, message: '学号不能为空!', trigger: 'blur' }],
         major: [{ required: true, message: '专业不能为空!', trigger: 'blur' }, { max: 10, message: '最长为 10 个字符', trigger: 'blur' }],
-        grade: [{ required: true, message: '年级不能为空!', trigger: 'blur' }, { max: 10, message: '最长为 10 个字符', trigger: 'blur' }]
+        grade: [{ required: true, message: '年级不能为空!', trigger: 'blur' }]
       }
     }
   },
@@ -90,7 +90,36 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.ruleForm)
+          axios
+            .post('/api/student/add', this.ruleForm)
+            .then(response => {
+              if (response.data.status === 1) {
+                this.$notify({
+                  title: '提示信息',
+                  message: '操作成功',
+                  type: 'success',
+                  position: 'bottom-right'
+                })
+                setTimeout(() => {
+                  this.$router.push('/')
+                }, 1500)
+              } else {
+                this.$notify({
+                  title: '错误信息',
+                  message: response.data.msg,
+                  type: 'error',
+                  position: 'bottom-right'
+                })
+              }
+            })
+            .catch(() => {
+              this.$notify({
+                title: '错误信息',
+                message: '注册失败',
+                type: 'error',
+                position: 'bottom-right'
+              })
+            })
         } else {
           console.log('error submit!!')
           return false

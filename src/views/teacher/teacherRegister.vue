@@ -96,7 +96,9 @@ export default {
                   type: 'success',
                   position: 'bottom-right'
                 })
-                this.$router.push('/')
+                setTimeout(() => {
+                  this.$router.push('/')
+                }, 1500)
               } else {
                 this.$notify({
                   title: '错误信息',
