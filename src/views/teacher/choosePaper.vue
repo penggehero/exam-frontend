@@ -43,9 +43,10 @@
       <el-table-column prop="number" label="试题数量" align="center" />
       <el-table-column prop="time" label="考试时间(分钟)" align="center" />
       <el-table-column prop="mark" label="总分" align="center" />
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作" width="200px" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="enter(scope.row.id)">查看排名</el-button>
+          <el-button size="mini" type="success" @click="showAnalysis(scope.row.id,scope.row.name)">成绩分析</el-button>
+          <el-button size="mini" type="primary" @click="showRank(scope.row.id)">查看排名</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -94,8 +95,14 @@ export default {
           this.resultlength = res.data.resultData.total
         })
     },
-    enter: function(val) {
+    showRank: function(val) {
       this.$router.push({ name: 'showRank', params: { paper_id: val }})
+    },
+    showError: function(val) {
+
+    },
+    showAnalysis: function(id, name) {
+      this.$router.push({ name: 'analysis', params: { paper_id: id, paper_name: name }})
     },
     handleSizeChange: function(size) {
       this.rows = size

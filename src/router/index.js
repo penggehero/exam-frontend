@@ -78,12 +78,15 @@ const teacherviews = [
   {
     path: '/grade',
     component: Layout,
+    alwaysShow: true,
+    name: 'grade',
+    meta: { title: '数据分析', icon: 'guide', noCache: true },
     children: [
       {
-        path: 'rank',
-        component: () => import('@/views/teacher/rank'),
-        name: 'rank',
-        meta: { title: '查看排名', icon: 'peoples', noCache: true }
+        path: 'choosePaper',
+        component: () => import('@/views/teacher/choosePaper'),
+        name: 'choosePaper',
+        meta: { title: '考试分析' }
       },
       {
         path: 'showRank',
@@ -91,6 +94,13 @@ const teacherviews = [
         name: 'showRank',
         hidden: true,
         meta: { title: '展示排名' }
+      },
+      {
+        path: 'analysis',
+        component: () => import('@/views/teacher/analysis'),
+        name: 'analysis',
+        hidden: true,
+        meta: { title: '成绩分析' }
       }
     ]
   },
