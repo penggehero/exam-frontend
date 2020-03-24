@@ -29,9 +29,37 @@
       :extend="chartExtend_MarkArea"
     />
     <br>
+    <br>
+    <!-- <strong style="text-align: center;">{{ paper_name }}各题目错误率排行榜</strong> -->
+    <div style="text-align: center;font-size: 18px">
+      <strong>{{ paper_name }}考试各题目错误率排行榜</strong>
+      <br><br><br>
+      <!-- 表格控件区 -->
+      <el-table
+        :data="tableData"
+        border
+        fit
+        highlight-current-row
+        :header-cell-style="{background:'#ecf5ff',fontSize:'14px',color:'#606266'}"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column v-if="false" prop="id" label="逻辑主键" align="center" />
+        <el-table-column prop="number" width="80px" label="题目编号" align="center" />
+        <el-table-column prop="flag" label="题目类型" width="80px" align="center" />
+        <el-table-column prop="name" label="题目名称" align="center" />
+        <el-table-column prop="mark" width="50px" label="分值" align="center" />
+        <el-table-column prop="q_A" width="100px" label="A选项" align="center" />
+        <el-table-column prop="q_B" width="100px" label="B选项" align="center" />
+        <el-table-column prop="q_C" width="100px" label="C选项" align="center" />
+        <el-table-column prop="q_D" width="100px" label="D选项" align="center" />
+        <el-table-column prop="answer" width="60px" label="正确答案" align="center" />
+        <el-table-column prop="wrongNum" width="50px" label="错误次数" align="center" />
+        <el-table-column prop="wrong" width="70px" label="错误率" align="center" />
+      </el-table>
+      <br><br><br>
+    </div>
   </div>
 </template>
-
 <script>
 import axios from 'axios'
 export default {
@@ -43,10 +71,11 @@ export default {
       chartData_Finsh: {
         columns: ['完成情况', '人数'],
         rows: [
-          { '完成情况': '已完成人数', '人数': 10 },
-          { '完成情况': '未完成人数', '人数': 300 }
+        //   { '完成情况': '已完成人数', '人数': 10 },
+        //   { '完成情况': '未完成人数', '人数': 300 }
         ]
       },
+      tableData: [],
       chartExtend_Finsh: {
         title: { text: '考试完成情况图', left: 'center' },
         legend: {
@@ -73,11 +102,11 @@ export default {
       chartData_MarkArea: {
         columns: ['MarkArea', 'StudentNumber'],
         rows: [
-          { MarkArea: '0-20分', StudentNumber: 3 },
-          { MarkArea: '20-40分', StudentNumber: 8 },
-          { MarkArea: '40-60分', StudentNumber: 10 },
-          { MarkArea: '60-80分', StudentNumber: 81 },
-          { MarkArea: '80-100分', StudentNumber: 11 }
+        //   { MarkArea: '0-20分', StudentNumber: 3 },
+        //   { MarkArea: '20-40分', StudentNumber: 8 },
+        //   { MarkArea: '40-60分', StudentNumber: 10 },
+        //   { MarkArea: '60-80分', StudentNumber: 81 },
+        //   { MarkArea: '80-100分', StudentNumber: 11 }
         ]
       },
       // 考试各题型成绩统计图
@@ -98,9 +127,9 @@ export default {
       chartData_TypeMark: {
         columns: ['Type', '单选题', '多选题', '判断题', '总分'],
         rows: [
-          { Type: '最低分', '单选题': 10, '多选题': 20, '判断题': 30, '总分': 10 },
-          { Type: '最高分', '单选题': 20, '多选题': 20, '判断题': 30, '总分': 110 },
-          { Type: '平均分', '单选题': 20, '多选题': 20, '判断题': 30, '总分': 60 }
+        //   { Type: '最低分', '单选题': 10, '多选题': 20, '判断题': 30, '总分': 10 },
+        //   { Type: '最高分', '单选题': 20, '多选题': 20, '判断题': 30, '总分': 110 },
+        //   { Type: '平均分', '单选题': 20, '多选题': 20, '判断题': 30, '总分': 60 }
         ]
 
       }
@@ -116,13 +145,18 @@ export default {
     this.chartExtend_Finsh.title.text = this.paper_name + '考试完成情况'
     this.chartExtend_MarkArea.title.text = this.paper_name + '考试分数区间人数统计图'
     this.chartExtend_TypeMark.title.text = this.paper_name + '考试各题型成绩统计图'
-    // axios
-    //   .get('/api//analysis/grade', { params: { paper_id: this.paper_id }})
-    //   .then(res => {
-    //     this.chartData_Finsh.rows = res.data.resultData.DoneList
-    //     this.chartData_TypeMark.rows = res.data.resultData.AVGList
-    //     this.chartData_MarkArea.rows = res.data.resultData.AreaList
-    //   })
+    axios
+      .get('/api//analysis/grade', { params: { paper_id: this.paper_id }})
+      .then(res => {
+        this.chartData_Finsh.rows = res.data.resultData.DoneList
+        this.chartData_TypeMark.rows = res.data.resultData.AVGList
+        this.chartData_MarkArea.rows = res.data.resultData.AreaList
+      })
+    axios
+      .get('/api//analysis/wrong', { params: { paper_id: this.paper_id }})
+      .then(res => {
+        this.tableData = res.data.resultData
+      })
   },
   methods: {
     back() {
@@ -134,6 +168,7 @@ export default {
 <style  scoped>
 .formStyle {
   margin: 10px 10px 10px 10px;
+
 }
 </style>
 

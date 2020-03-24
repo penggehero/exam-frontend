@@ -87,7 +87,7 @@ export default {
       this.search()
     },
     back() {
-      this.$router.push({ path: '/grade/rank' })
+      this.$router.push({ path: '/grade/choosePaper' })
     },
     handleSizeChange: function(size) {
       this.rows = size
