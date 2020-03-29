@@ -47,9 +47,10 @@
       <el-table-column prop="student_name" label="学生姓名" align="center" />
       <el-table-column prop="school_id" label="学号" align="center" />
       <el-table-column prop="paper_name" label="考试名称" align="center" />
-      <el-table-column prop="date" label="完成时间" align="center" />
+      <el-table-column prop="date" label="完成时间" width="180px" align="center" />
       <el-table-column prop="single_mark" label="单选题得分" align="center" />
       <el-table-column prop="double_mark" label="多选题得分" align="center" />
+      <el-table-column prop="judge_mark" label="判断题得分" align="center" />
       <el-table-column prop="mark" label="总分" align="center" />
     </el-table>
 
@@ -119,8 +120,9 @@ export default {
         mark: undefined
       },
       rules: {
-        single_mark: [{ required: true, message: '学院不能为空!', trigger: 'blur' }],
-        double_mark: [{ required: true, message: '请选择性别', trigger: 'blur' }]
+        single_mark: [{ required: true, message: '单选题分数不能为空!', trigger: 'blur' }],
+        double_mark: [{ required: true, message: '多选题分数不能为空!', trigger: 'blur' }],
+        judge_mark: [{ required: true, message: '判断题分数不能为空!', trigger: 'blur' }]
       },
       page: 1,
       rows: 10,
